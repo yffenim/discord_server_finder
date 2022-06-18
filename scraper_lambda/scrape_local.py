@@ -83,7 +83,7 @@ df = pd.DataFrame(
 
 if csv:
     print("Creating output file...")
-    df.to_json(
+    df.to_csv(
         f'{tag}_servers.csv',
         index=False,
         encoding='utf-8-sig',

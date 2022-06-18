@@ -2,13 +2,35 @@
 
 ## RoadMap
 
-- [ ] serverless scraper via AWS lambda
-- [ ] node.js API with fastify.io for search filtering 
-- [ ] minimalist front-end with React.js to demo
+- [ ] webscraper lambda
+- [ ] microservice lambda as search API 
+- [ ] microservice lambda as API to handle DynamoDB interaction
+- [ ] minimalist react front end to demo dynamic search function based on inclusion and exlusion tags
 
 ## Usage: scraper lamba
 
-### Cloud 
+### Cloud: WIP
+
+Using Postman, `curl`, or your own webserver, send a `POST` request with a `JSON` body object containing your search tag.
+
+```
+https://oxngnmwe2h.execute-api.us-east-1.amazonaws.com/scraper_lambda
+```
+
+Search Tag:
+
+```
+{ 
+	"tag": "YOUR_TAG"
+}
+```
+
+For example: 
+
+```
+curl --header "Content-Type: text/plain" -d "{\"a\":16,\"b\":12}" https://oxngnmwe2h.execute-api.us-east-1.amazonaws.com/scraper_lambda
+```
+
 
 ### Locally:
 
@@ -21,7 +43,8 @@ Clone this repo:
 git clone git@github.com:yffenim/discord_server_finder.git
 ```
 
-Install dependencies after entering `pipenv` environment:
+Install dependencies after entering `pipenv` environment in `/scraper_lambda/` directory:
+
 ```
 pipenv shell
 pipenv install
@@ -29,5 +52,5 @@ pipenv install
 
 Run the app:
 ```
-python scrape.py
+python /scraper_lambda/scrape_local.py
 ```

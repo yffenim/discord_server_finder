@@ -2,10 +2,9 @@ import sys
 import cloudscraper
 import discord
 import pandas as pd
+import json 
 from bs4 import BeautifulSoup
 from schema import Schema, Or, And, Use
-
-
 
 # Get User Input
 print("Please enter the tag:")
@@ -13,9 +12,8 @@ tag = input()
 
 print("Finding servers for", tag)
 
-# tag = "rust"
-pages = 15
-csv = True
+pages = 50
+json = True
 
 # Constants
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
@@ -64,7 +62,7 @@ for page in range(1, pages + 1):
         # Add each server found
         servers.append(server)
 
-
+# CSV dataframe
 df = pd.DataFrame(
     servers,
     columns=[
@@ -80,15 +78,13 @@ df = pd.DataFrame(
     ]
 )
 
+df = df.drop_duplicates()
 
-if csv:
-    print("Creating output file...")
-    df.to_json(
-        f'{tag}_servers.csv',
-        index=False,
-        encoding='utf-8-sig',
-        date_format='%Y:%m:%d'
-    )
-    print(f"Done writing: {tag}_servers.csv")
+if json:
+    print("Printing output JSON file...")
+    result = df.to_json(orient="split")
+    # result = df.to_json('test.json')
+    parsed = json.loads(result)
+    j = json.dumps(parsed, indent=4)
 else:
     print("Exiting without writing file!")

@@ -1,5 +1,10 @@
 # Iteration I of Backend for Disboard Server Search 
 
+This has been abandoned bc the scraper does not work when run from an AWS IP range to discord. 
+
+If you can resolve this issue, please respond here: https://stackoverflow.com/questions/72722566/aws-lambda-python-webscraping-unable-to-bypass-cloudfare-anti-bots-from-aws
+
+
 ## RoadMap
 
 - [ ] webscraper lambda

@@ -2,18 +2,19 @@ import sys
 import cloudscraper
 import discord
 import pandas as pd
-import json 
 from bs4 import BeautifulSoup
 from schema import Schema, Or, And, Use
 
+
 # Get User Input
-print("Please enter the tag:")
-tag = input()
+# print("Please enter the tag:")
+# tag = input()
 
-print("Finding servers for", tag)
+# print("Finding servers for", tag)
 
-pages = 50
-json = True
+tag = "buffy"
+pages = 2
+csv = True
 
 # Constants
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
@@ -23,6 +24,8 @@ servers = []
 
 # Iterate over each page for a tag
 for page in range(1, pages + 1):
+    # url = f"https://disboard.org/servers/{page}?sort=member_count"
+    # url = f"https://disboard.org/servers/tag/{tag}/{page}?sort=-member_count"
     url = f"https://disboard.org/servers/tag/{tag}/{page}?sort=-member_count"
     scraper = cloudscraper.create_scraper()
     resource = scraper.get(url).text
@@ -62,7 +65,7 @@ for page in range(1, pages + 1):
         # Add each server found
         servers.append(server)
 
-# CSV dataframe
+
 df = pd.DataFrame(
     servers,
     columns=[
@@ -78,13 +81,15 @@ df = pd.DataFrame(
     ]
 )
 
-df = df.drop_duplicates()
 
-if json:
-    print("Printing output JSON file...")
-    result = df.to_json(orient="split")
-    # result = df.to_json('test.json')
-    parsed = json.loads(result)
-    j = json.dumps(parsed, indent=4)
+if csv:
+    print("Creating output file...")
+    csv_data = df.to_csv(
+        f'{pages}_pages_of_servers.csv',
+        index=False,
+        encoding='utf-8-sig',
+        date_format='%Y:%m:%d'
+    )
+    print(f"Done writing: {pages}_pages_of_servers.csv")
 else:
     print("Exiting without writing file!")

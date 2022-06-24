@@ -7,14 +7,7 @@ from schema import Schema, Or, And, Use
 
 
 
-# Get User Input
-print("Please enter the tag:")
-tag = input()
-
-print("Finding servers for", tag)
-
-# tag = "rust"
-pages = 15
+pages = 24
 csv = True
 
 # Constants
@@ -25,7 +18,9 @@ servers = []
 
 # Iterate over each page for a tag
 for page in range(1, pages + 1):
-    url = f"https://disboard.org/servers/tag/{tag}/{page}?sort=-member_count"
+    url = f"https://disboard.org/servers/{page}?sort=-member_count"
+    # url = f"https://disboard.org/servers/{page}"
+    # url = f"https://disboard.org/servers"
     scraper = cloudscraper.create_scraper()
     resource = scraper.get(url).text
     soup = BeautifulSoup(resource, 'html.parser')
@@ -84,11 +79,13 @@ df = pd.DataFrame(
 if csv:
     print("Creating output file...")
     df.to_csv(
-        f'{tag}_servers.csv',
+        # f'{pages}_pages_of_servers.csv',
+        f'{pages}_pages_of_servers_by_member_count.csv',
         index=False,
         encoding='utf-8-sig',
         date_format='%Y:%m:%d'
     )
-    print(f"Done writing: {tag}_servers.csv")
+    print(f"Done writing: {pages}_pages_of_servers.csv")
 else:
     print("Exiting without writing file!")
+

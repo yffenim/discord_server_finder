@@ -7,7 +7,8 @@ from schema import Schema, Or, And, Use
 
 
 
-pages = 24
+print('calling py script')
+pages = 2
 csv = True
 
 # Constants

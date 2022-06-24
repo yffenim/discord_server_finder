@@ -12,7 +12,7 @@ from schema import Schema, Or, And, Use
 
 # print("Finding servers for", tag)
 tag = "buffy"
-pages = 50
+pages = 5
 json = True
 
 # Constants

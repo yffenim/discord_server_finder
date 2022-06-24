@@ -1,31 +1,32 @@
 import sys
+# from io import StringIO
+import json
 import cloudscraper
 import discord
-import pandas as pd
 from bs4 import BeautifulSoup
-from schema import Schema, Or, And, Use
 
 
-# Get User Input
-# print("Please enter the tag:")
-# tag = input()
+# Get user input 
+input_list = sys.argv
 
-# print("Finding servers for", tag)
+# Set up url 
+tag = input_list[1]
+i = int(input_list[2])
+pages = i 
+# Note: max amount of pages allowed is 50
 
-tag = "buffy"
-pages = 2
-csv = True
+# print(pages)
+# print(f'The type is: {type(pages)}')
 
 # Constants
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 
 # Variables
 servers = []
+unique_servers = []
 
 # Iterate over each page for a tag
 for page in range(1, pages + 1):
-    # url = f"https://disboard.org/servers/{page}?sort=member_count"
-    # url = f"https://disboard.org/servers/tag/{tag}/{page}?sort=-member_count"
     url = f"https://disboard.org/servers/tag/{tag}/{page}?sort=-member_count"
     scraper = cloudscraper.create_scraper()
     resource = scraper.get(url).text
@@ -65,31 +66,14 @@ for page in range(1, pages + 1):
         # Add each server found
         servers.append(server)
 
+# Remove duplicates 
+for i in servers:
+    if i not in unique_servers:
+        unique_servers.append(i)
 
-df = pd.DataFrame(
-    servers,
-    columns=[
-        'Server Name',
-        'Members Online',
-        'Creation Date',
-        "Invite Link",
-        'Tag 1',
-        'Tag 2',
-        'Tag 3',
-        'Tag 4',
-        'Tag 5'
-    ]
-)
+# Convertto json and print to return to server 
+j = json.dumps(unique_servers, indent=4, sort_keys=True, default=str)
+print(j)
 
 
-if csv:
-    print("Creating output file...")
-    csv_data = df.to_csv(
-        f'{pages}_pages_of_servers.csv',
-        index=False,
-        encoding='utf-8-sig',
-        date_format='%Y:%m:%d'
-    )
-    print(f"Done writing: {pages}_pages_of_servers.csv")
-else:
-    print("Exiting without writing file!")
+
